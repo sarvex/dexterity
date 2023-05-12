@@ -87,7 +87,7 @@ class Node:
             node_data, _ = BYTES_CATALOG.unpack_partial(InnerNode, BytesIO(buffer))
         elif kind == NodeKind.Leaf:
             node_data, _ = BYTES_CATALOG.unpack_partial(LeafNode, BytesIO(buffer))
-        elif (kind == NodeKind.Free) or (kind == NodeKind.LastFree):
+        elif kind in [NodeKind.Free, NodeKind.LastFree]:
             node_data, _ = BYTES_CATALOG.unpack_partial(FreeNode, BytesIO(buffer))
         else:
             node_data = None
@@ -131,10 +131,7 @@ class Slab:
 
     @property
     def root(self):
-        if self.header.leaf_count == 0:
-            return None
-        else:
-            return self.header.root_node
+        return None if self.header.leaf_count == 0 else self.header.root_node
 
     def get_node(self, key):
         start = PADDED_SLAB_HEADER_LEN + key * SLOT_SIZE
@@ -145,37 +142,36 @@ class Slab:
             return InnerNode.from_bytes(buffer[8:])
         if tag == 2:
             return LeafNode.from_bytes(buffer[8:])
-        if tag == 3 or tag == 4:
+        if tag in [3, 4]:
             return FreeNode.from_bytes(buffer[8:])
 
     def find_min_max(self, find_max: bool):
         root = self.root
         if root is None:
             return None
-        else:
-            while 1:
-                data_buffer = self.get_node(root)
-                tag, data_buffer = BYTES_CATALOG.unpack_partial(
-                    NodeKind, BytesIO(data_buffer)
+        while 1:
+            data_buffer = self.get_node(root)
+            tag, data_buffer = BYTES_CATALOG.unpack_partial(
+                NodeKind, BytesIO(data_buffer)
+            )
+            if tag == NodeKind.Inner:
+                root_contents, _ = BYTES_CATALOG.unpack_partial(
+                    InnerNode, BytesIO(data_buffer)
                 )
-                if tag == NodeKind.Inner:
-                    root_contents, _ = BYTES_CATALOG.unpack_partial(
-                        InnerNode, BytesIO(data_buffer)
-                    )
-                    idx = 1 if find_max else 0
-                    root = root_contents.children[idx]  # returns key
-                elif (tag == NodeKind.Free) or (tag == NodeKind.LastFree):
-                    root_contents, _ = BYTES_CATALOG.unpack_partial(
-                        FreeNode, BytesIO(data_buffer)
-                    )
-                    return root_contents
-                elif tag == NodeKind.Leaf:
-                    root_contents, _ = BYTES_CATALOG.unpack_partial(
-                        LeafNode, BytesIO(data_buffer)
-                    )
-                    return root_contents
-                else:
-                    return None
+                idx = 1 if find_max else 0
+                root = root_contents.children[idx]  # returns key
+            elif tag in [NodeKind.Free, NodeKind.LastFree]:
+                root_contents, _ = BYTES_CATALOG.unpack_partial(
+                    FreeNode, BytesIO(data_buffer)
+                )
+                return root_contents
+            elif tag == NodeKind.Leaf:
+                root_contents, _ = BYTES_CATALOG.unpack_partial(
+                    LeafNode, BytesIO(data_buffer)
+                )
+                return root_contents
+            else:
+                return None
 
     def inorder_traversal(self, root, side: Side):
         node = self.get_node(root)
@@ -210,16 +206,15 @@ class Slab:
         order_book = {}
         if root is None:
             return order_book
-        else:
-            orders = self.inorder_traversal(root, side)
-            for ord in orders:
-                price = ord[0]
-                oid = ord[1]
-                order_size = ord[-1]
-                if (price, oid) in order_book:
-                    order_book[(price, oid)][0] += order_size
-                else:
-                    order_book[(price, oid)] = [order_size]
+        orders = self.inorder_traversal(root, side)
+        for ord in orders:
+            price = ord[0]
+            oid = ord[1]
+            order_size = ord[-1]
+            if (price, oid) in order_book:
+                order_book[(price, oid)][0] += order_size
+            else:
+                order_book[(price, oid)] = [order_size]
         df = (
             pd.DataFrame(order_book)
             .T.reset_index()
@@ -228,9 +223,7 @@ class Slab:
             .sort_values("Price", ascending=False)
             .reset_index(drop=True)
         )[["Oid", "Price", "Qty"]]
-        if group:
-            return df.groupby("Price").agg({"Qty": ["sum", "count"]})
-        return df
+        return df.groupby("Price").agg({"Qty": ["sum", "count"]}) if group else df
 
     # key: U128
     # callback_info_pt: U64

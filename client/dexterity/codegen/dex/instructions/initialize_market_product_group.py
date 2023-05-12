@@ -45,21 +45,22 @@ class InitializeMarketProductGroupIx:
     params: InitializeMarketProductGroupParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.authority)
-        keys.append(self.market_product_group)
-        keys.append(self.market_product_group_vault)
-        keys.append(self.vault_mint)
-        keys.append(self.fee_collector)
-        keys.append(self.fee_model_program)
-        keys.append(self.fee_model_configuration_acct)
-        keys.append(self.risk_model_configuration_acct)
-        keys.append(self.risk_engine_program)
-        keys.append(self.sysvar_rent)
-        keys.append(self.system_program)
-        keys.append(self.token_program)
-        keys.append(self.fee_output_register)
-        keys.append(self.risk_output_register)
+        keys = [
+            self.authority,
+            self.market_product_group,
+            self.market_product_group_vault,
+            self.vault_mint,
+            self.fee_collector,
+            self.fee_model_program,
+            self.fee_model_configuration_acct,
+            self.risk_model_configuration_acct,
+            self.risk_engine_program,
+            self.sysvar_rent,
+            self.system_program,
+            self.token_program,
+            self.fee_output_register,
+            self.risk_output_register,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

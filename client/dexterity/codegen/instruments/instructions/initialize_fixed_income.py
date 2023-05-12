@@ -35,11 +35,12 @@ class InitializeFixedIncomeIx:
     params: InitializeFixedIncomeParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.fixed_income_metadata)
-        keys.append(self.market_product_group)
-        keys.append(self.payer)
-        keys.append(self.system_program)
+        keys = [
+            self.fixed_income_metadata,
+            self.market_product_group,
+            self.payer,
+            self.system_program,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

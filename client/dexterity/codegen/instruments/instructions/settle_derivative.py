@@ -32,12 +32,13 @@ class SettleDerivativeIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.derivative_metadata)
-        keys.append(self.price_oracle)
-        keys.append(self.dex_program)
-        keys.append(self.clock)
+        keys = [
+            self.market_product_group,
+            self.derivative_metadata,
+            self.price_oracle,
+            self.dex_program,
+            self.clock,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

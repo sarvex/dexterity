@@ -32,12 +32,13 @@ class SweepFeesIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.fee_collector)
-        keys.append(self.market_product_group_vault)
-        keys.append(self.fee_collector_token_account)
-        keys.append(self.token_program)
+        keys = [
+            self.market_product_group,
+            self.fee_collector,
+            self.market_product_group_vault,
+            self.fee_collector_token_account,
+            self.token_program,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

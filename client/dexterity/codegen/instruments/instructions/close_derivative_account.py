@@ -30,10 +30,7 @@ class CloseDerivativeAccountIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.derivative_metadata)
-        keys.append(self.close_authority)
-        keys.append(self.destination)
+        keys = [self.derivative_metadata, self.close_authority, self.destination]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

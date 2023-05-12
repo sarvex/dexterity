@@ -47,23 +47,24 @@ class CancelOrderIx:
     params: CancelOrderParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.user)
-        keys.append(self.trader_risk_group)
-        keys.append(self.market_product_group)
-        keys.append(self.product)
-        keys.append(self.aaob_program)
-        keys.append(self.orderbook)
-        keys.append(self.market_signer)
-        keys.append(self.event_queue)
-        keys.append(self.bids)
-        keys.append(self.asks)
-        keys.append(self.system_program)
-        keys.append(self.risk_engine_program)
-        keys.append(self.risk_model_configuration_acct)
-        keys.append(self.risk_output_register)
-        keys.append(self.trader_risk_state_acct)
-        keys.append(self.risk_signer)
+        keys = [
+            self.user,
+            self.trader_risk_group,
+            self.market_product_group,
+            self.product,
+            self.aaob_program,
+            self.orderbook,
+            self.market_signer,
+            self.event_queue,
+            self.bids,
+            self.asks,
+            self.system_program,
+            self.risk_engine_program,
+            self.risk_model_configuration_acct,
+            self.risk_output_register,
+            self.trader_risk_state_acct,
+            self.risk_signer,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

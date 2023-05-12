@@ -42,18 +42,19 @@ class ConsumeOrderbookEventsIx:
     params: ConsumeOrderbookEventsParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.aaob_program)
-        keys.append(self.market_product_group)
-        keys.append(self.product)
-        keys.append(self.market_signer)
-        keys.append(self.orderbook)
-        keys.append(self.event_queue)
-        keys.append(self.reward_target)
-        keys.append(self.fee_model_program)
-        keys.append(self.fee_model_configuration_acct)
-        keys.append(self.fee_output_register)
-        keys.append(self.risk_and_fee_signer)
+        keys = [
+            self.aaob_program,
+            self.market_product_group,
+            self.product,
+            self.market_signer,
+            self.orderbook,
+            self.event_queue,
+            self.reward_target,
+            self.fee_model_program,
+            self.fee_model_configuration_acct,
+            self.fee_output_register,
+            self.risk_and_fee_signer,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

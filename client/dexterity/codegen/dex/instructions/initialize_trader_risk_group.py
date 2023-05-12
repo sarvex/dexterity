@@ -35,15 +35,16 @@ class InitializeTraderRiskGroupIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.owner)
-        keys.append(self.trader_risk_group)
-        keys.append(self.market_product_group)
-        keys.append(self.risk_signer)
-        keys.append(self.trader_risk_state_acct)
-        keys.append(self.trader_fee_state_acct)
-        keys.append(self.risk_engine_program)
-        keys.append(self.system_program)
+        keys = [
+            self.owner,
+            self.trader_risk_group,
+            self.market_product_group,
+            self.risk_signer,
+            self.trader_risk_state_acct,
+            self.trader_fee_state_acct,
+            self.risk_engine_program,
+            self.system_program,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

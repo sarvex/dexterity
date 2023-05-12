@@ -12,8 +12,6 @@ def account_parser(data):
         return MarketState.from_bytes(data)
     elif tag == AccountTag.EVENT_QUEUE:
         return EventQueue.from_bytes(data)
-    elif tag == AccountTag.BIDS:
-        return Slab.from_bytes(data)
-    elif tag == AccountTag.ASKS:
+    elif tag in [AccountTag.BIDS, AccountTag.ASKS]:
         return Slab.from_bytes(data)
     raise ValueError()

@@ -30,10 +30,7 @@ class ChooseSuccessorIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.authority)
-        keys.append(self.new_authority)
+        keys = [self.market_product_group, self.authority, self.new_authority]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

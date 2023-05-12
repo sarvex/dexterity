@@ -12,7 +12,7 @@ def main():
         path = f"{root}/target/deploy/{name}.so"
         args += f" --bpf-program {pid} {path}"
     print(f"Running {cmd} {args}")
-    print(os.system(cmd + " " + args))
+    print(os.system(f"{cmd} {args}"))
 
 
 if __name__ == "__main__":

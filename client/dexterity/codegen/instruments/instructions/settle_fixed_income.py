@@ -30,10 +30,11 @@ class SettleFixedIncomeIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.fixed_income_metadata)
-        keys.append(self.dex_program)
+        keys = [
+            self.market_product_group,
+            self.fixed_income_metadata,
+            self.dex_program,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

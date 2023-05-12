@@ -29,9 +29,7 @@ class UpdateTraderFundingIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.trader_risk_group)
+        keys = [self.market_product_group, self.trader_risk_group]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

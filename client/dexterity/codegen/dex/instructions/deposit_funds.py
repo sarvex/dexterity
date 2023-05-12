@@ -37,13 +37,14 @@ class DepositFundsIx:
     params: DepositFundsParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.token_program)
-        keys.append(self.user)
-        keys.append(self.user_token_account)
-        keys.append(self.trader_risk_group)
-        keys.append(self.market_product_group)
-        keys.append(self.market_product_group_vault)
+        keys = [
+            self.token_program,
+            self.user,
+            self.user_token_account,
+            self.trader_risk_group,
+            self.market_product_group,
+            self.market_product_group_vault,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

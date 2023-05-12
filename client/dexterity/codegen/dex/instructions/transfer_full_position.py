@@ -37,17 +37,18 @@ class TransferFullPositionIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.liquidator)
-        keys.append(self.market_product_group)
-        keys.append(self.liquidatee_risk_group)
-        keys.append(self.liquidator_risk_group)
-        keys.append(self.risk_engine_program)
-        keys.append(self.risk_model_configuration_acct)
-        keys.append(self.risk_output_register)
-        keys.append(self.liquidator_risk_state_account_info)
-        keys.append(self.liquidatee_risk_state_account_info)
-        keys.append(self.risk_signer)
+        keys = [
+            self.liquidator,
+            self.market_product_group,
+            self.liquidatee_risk_group,
+            self.liquidator_risk_group,
+            self.risk_engine_program,
+            self.risk_model_configuration_acct,
+            self.risk_output_register,
+            self.liquidator_risk_state_account_info,
+            self.liquidatee_risk_state_account_info,
+            self.risk_signer,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

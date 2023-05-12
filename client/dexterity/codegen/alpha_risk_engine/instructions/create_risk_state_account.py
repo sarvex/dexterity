@@ -32,12 +32,13 @@ class CreateRiskStateAccountIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.payer)
-        keys.append(self.risk_signer)
-        keys.append(self.risk_state)
-        keys.append(self.market_product_group)
-        keys.append(self.system_program)
+        keys = [
+            self.payer,
+            self.risk_signer,
+            self.risk_state,
+            self.market_product_group,
+            self.system_program,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

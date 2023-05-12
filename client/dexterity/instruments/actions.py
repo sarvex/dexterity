@@ -36,10 +36,7 @@ def extract_acct_addr(resp, idx=0):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=lambda x: extract_acct_addr(x, idx=0))

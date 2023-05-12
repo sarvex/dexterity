@@ -35,11 +35,12 @@ class InitializeMarketProductIx:
     params: InitializeMarketProductParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.authority)
-        keys.append(self.market_product_group)
-        keys.append(self.product)
-        keys.append(self.orderbook)
+        keys = [
+            self.authority,
+            self.market_product_group,
+            self.product,
+            self.orderbook,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

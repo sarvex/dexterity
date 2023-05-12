@@ -65,7 +65,7 @@ def cli(
     }
     # allow each IDL to reference types defined in other IDLs
     for (_, exported_types) in protocol_to_idl_and_types.values():
-        external_types.update(exported_types)
+        external_types |= exported_types
 
     for protocol, (idl, _) in protocol_to_idl_and_types.items():
         print(f"Generating code for {protocol}")
@@ -97,7 +97,7 @@ def defined_types_to_imports(
         return name
 
     type_definitions = idl.types + idl.accounts
-    return dict(((ty.name, partial(add_import, ty.name)) for ty in type_definitions))
+    return {ty.name: partial(add_import, ty.name) for ty in type_definitions}
 
 
 def get_protocols(idl_dir: str, pids: Union[str, Dict[str, str]]) -> Dict[str, str]:
@@ -113,10 +113,11 @@ def get_protocols(idl_dir: str, pids: Union[str, Dict[str, str]]) -> Dict[str, s
     if isinstance(pids, str):
         pids = dir_to_pids(pids)
 
-    intersection = {}
-    for protocol, pid in pids.items():
-        if protocol in protocols:
-            intersection[protocol] = pid
+    intersection = {
+        protocol: pid
+        for protocol, pid in pids.items()
+        if protocol in protocols
+    }
     for protocol in protocols:
         if protocol not in pids:
             print("WARNING: found idl file with no matching program id: ", protocol)

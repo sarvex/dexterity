@@ -36,16 +36,17 @@ class RemoveMarketProductIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.authority)
-        keys.append(self.market_product_group)
-        keys.append(self.product)
-        keys.append(self.aaob_program)
-        keys.append(self.orderbook)
-        keys.append(self.market_signer)
-        keys.append(self.event_queue)
-        keys.append(self.bids)
-        keys.append(self.asks)
+        keys = [
+            self.authority,
+            self.market_product_group,
+            self.product,
+            self.aaob_program,
+            self.orderbook,
+            self.market_signer,
+            self.event_queue,
+            self.bids,
+            self.asks,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

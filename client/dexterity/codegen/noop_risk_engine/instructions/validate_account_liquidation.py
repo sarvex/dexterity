@@ -33,13 +33,14 @@ class ValidateAccountLiquidationIx:
     remaining_accounts: Optional[List[AccountMeta]]
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.market_product_group)
-        keys.append(self.trader_risk_group)
-        keys.append(self.out_register_risk_info)
-        keys.append(self.risk_state_account_info)
-        keys.append(self.risk_model_configuration_acct)
-        keys.append(self.risk_signer)
+        keys = [
+            self.market_product_group,
+            self.trader_risk_group,
+            self.out_register_risk_info,
+            self.risk_state_account_info,
+            self.risk_model_configuration_acct,
+            self.risk_signer,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

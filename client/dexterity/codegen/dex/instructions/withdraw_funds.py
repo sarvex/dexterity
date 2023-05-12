@@ -42,18 +42,19 @@ class WithdrawFundsIx:
     params: WithdrawFundsParams
 
     def to_instruction(self):
-        keys = []
-        keys.append(self.token_program)
-        keys.append(self.user)
-        keys.append(self.user_token_account)
-        keys.append(self.trader_risk_group)
-        keys.append(self.market_product_group)
-        keys.append(self.market_product_group_vault)
-        keys.append(self.risk_engine_program)
-        keys.append(self.risk_model_configuration_acct)
-        keys.append(self.risk_output_register)
-        keys.append(self.trader_risk_state_acct)
-        keys.append(self.risk_signer)
+        keys = [
+            self.token_program,
+            self.user,
+            self.user_token_account,
+            self.trader_risk_group,
+            self.market_product_group,
+            self.market_product_group_vault,
+            self.risk_engine_program,
+            self.risk_model_configuration_acct,
+            self.risk_output_register,
+            self.trader_risk_state_acct,
+            self.risk_signer,
+        ]
         if self.remaining_accounts is not None:
             keys.extend(self.remaining_accounts)
 

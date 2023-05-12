@@ -155,9 +155,8 @@ class SDKTrader:
 
         pattern = '^Program log: Order summary : OrderSummary { posted_order_id: Some\((\\d+)\).*'
         for log_line in trans_details.log_messages:
-            order_id_match = re.match(pattern, log_line)
-            if order_id_match:
-                order_id = order_id_match.group(1)
+            if order_id_match := re.match(pattern, log_line):
+                order_id = order_id_match[1]
                 return int(order_id)
 
         return None
@@ -175,7 +174,7 @@ class SDKTrader:
     ):
         remaining_accounts = [to_account_meta(ra, is_signer=False, is_writable=True) for ra in risk_accounts]
 
-        ix = dixs.new_order(
+        return dixs.new_order(
             user=self.keypair.public_key,
             trader_risk_group=self.account,
             market_product_group=sdk.market_product_group,
@@ -197,17 +196,19 @@ class SDKTrader:
             risk_and_fee_signer=sdk.risk_signer,
             params=dtys.NewOrderParams(
                 side=side,
-                max_base_qty=dtys.Fractional.into(size, product.stale_product.metadata().base_decimals),
+                max_base_qty=dtys.Fractional.into(
+                    size, product.stale_product.metadata().base_decimals
+                ),
                 order_type=order_type,
                 self_trade_behavior=self_trade_behavior,
                 match_limit=10,
-                limit_price=dtys.Fractional.into(price, product.stale_product.metadata().base_decimals),
+                limit_price=dtys.Fractional.into(
+                    price, product.stale_product.metadata().base_decimals
+                ),
             ),
             remaining_accounts=remaining_accounts,
             program_id=self.dex_program,
         )
-
-        return ix
 
     def cancel(
             self,
@@ -234,7 +235,7 @@ class SDKTrader:
             order_id: int,
             under_water_trg: PublicKey,
     ):
-        ix = dixs.cancel_order(
+        return dixs.cancel_order(
             user=self.keypair.public_key,
             trader_risk_group=under_water_trg,
             market_product_group=sdk.market_product_group,
@@ -256,8 +257,6 @@ class SDKTrader:
             program_id=self.dex_program,
         )
 
-        return ix
-
     def replace(
             self,
             sdk: "SDKContext",
@@ -277,9 +276,8 @@ class SDKTrader:
 
         pattern = '^Program log: Order summary : OrderSummary { posted_order_id: Some\((\\d+)\).*'
         for log_line in trans_details.log_messages:
-            order_id_match = re.match(pattern, log_line)
-            if order_id_match:
-                order_id = order_id_match.group(1)
+            if order_id_match := re.match(pattern, log_line):
+                order_id = order_id_match[1]
                 return int(order_id)
 
         return None

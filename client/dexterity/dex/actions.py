@@ -81,10 +81,7 @@ def _post_create_market_product_group(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=_post_create_market_product_group)
@@ -127,10 +124,7 @@ def _post_init_market_product_group(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=_post_init_market_product_group)
@@ -219,10 +213,7 @@ def _post_create_risk_register(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 def _post_create_risk_config(resp):
@@ -235,10 +226,7 @@ def _post_create_risk_config(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify
@@ -341,9 +329,10 @@ def create_risk_model_configuration_acct(
         program_id: Optional[PublicKey] = pids.ALPHA_RISK_ENGINE_PROGRAM_ID,
 ):
     risk_model_key = Keypair()
-    if program_id == pids.NOOP_RISK_ENGINE_PROGRAM_ID:
-        space = 0
-    elif program_id == pids.ALPHA_RISK_ENGINE_PROGRAM_ID:
+    if program_id in [
+        pids.NOOP_RISK_ENGINE_PROGRAM_ID,
+        pids.ALPHA_RISK_ENGINE_PROGRAM_ID,
+    ]:
         space = 0
     else:
         print("Unexpected program ID")
@@ -620,10 +609,7 @@ def _post_create_trader_risk_group(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 _risk_state_account_num = 0
@@ -647,7 +633,12 @@ def create_trader_risk_group(
 
     risk_state_account = Keypair.generate()
     global _risk_state_account_num
-    Context.add_signers((risk_state_account, "risk_state_account" + str(_risk_state_account_num)))
+    Context.add_signers(
+        (
+            risk_state_account,
+            f"risk_state_account{str(_risk_state_account_num)}",
+        )
+    )
     _risk_state_account_num = _risk_state_account_num + 1
 
     if fee_ix is None:
@@ -705,10 +696,7 @@ def _post_init_mint(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=_post_init_mint)
@@ -747,10 +735,7 @@ def _post_init_trader_mint_account(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=_post_init_trader_mint_account)

@@ -109,7 +109,7 @@ class AccountParser:
     _parsers: Dict[bytes, callable]  # key: program_id
 
     def __init__(self):
-        self._parsers = dict()
+        self._parsers = {}
 
     def register_parser(self, program_id, parser):
         self._parsers[bytes(program_id)] = parser
@@ -170,7 +170,7 @@ class TransactionDetails:
 
     @property
     def emitted_logs(self):
-        result = dict()
+        result = {}
         for msg in self.log_messages:
             if msg.startswith(DEX_LOG_PREFIX):
                 key, val = msg[len(DEX_LOG_PREFIX):].split(" ")
@@ -204,10 +204,7 @@ class AccountDetails:
     @property
     def data(self):
         value = self.content["result"]["value"]
-        if not value:
-            return None
-
-        return value["data"]
+        return None if not value else value["data"]
 
     @property
     def data_obj(self):
@@ -279,7 +276,7 @@ def send_transaction(
 
     raise_on_error = raise_on_error if raise_on_error is not None else Context.get_raise_on_error()
 
-    if len(signers) == 0:
+    if not signers:
         signers = Context.get_signers()
     else:
         signers = {bytes(signer.public_key): (signer, f"arg  {i}") for i, signer in enumerate(signers)}
@@ -345,9 +342,7 @@ def actionify(func=None, /, post_process=lambda resp: (None, resp), raise_error=
         send.make = make
         return send
 
-    if func is None:
-        return _actionify
-    return _actionify(func)
+    return _actionify if func is None else _actionify(func)
 
 
 def sighash(ix_name: str) -> bytes:

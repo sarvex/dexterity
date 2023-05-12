@@ -29,10 +29,7 @@ def _post_init_risk_config(resp):
     else:
         exists = True
 
-    if exists:
-        return addr, resp
-    else:
-        return None, resp
+    return (addr, resp) if exists else (None, resp)
 
 
 @actionify(post_process=_post_init_risk_config)
